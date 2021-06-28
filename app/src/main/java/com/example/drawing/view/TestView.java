@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PathMeasure;
 import android.util.AttributeSet;
 import android.view.View;
 import androidx.annotation.Nullable;
@@ -12,6 +13,7 @@ public class TestView extends View {
 
   Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG); // 抗鋸齒
   Path path = new Path();
+  PathMeasure pathMeasure;
 
   public TestView(Context context,
       @Nullable AttributeSet attrs) {
@@ -29,6 +31,11 @@ public class TestView extends View {
     // CW： Clock Work 順時針
     // CCW： Counter Clock Work 逆時針
     path.addCircle(getWidth() / 2, getHeight() / 2, 400, Path.Direction.CW);
+
+    pathMeasure = new PathMeasure(path, false);
+    // forceClosed 封閉圖形。如果你圖形沒封閉，true 可以自動幫你封閉圖形。
+    pathMeasure.getLength();  // path 的長度
+    pathMeasure.getPosTan() // 取得 path 的 正切角度
   }
 
   @Override protected void onDraw(Canvas canvas) {
