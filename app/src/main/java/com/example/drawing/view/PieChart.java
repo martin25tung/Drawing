@@ -49,7 +49,7 @@ public class PieChart extends View {
             (float) Math.sin(Math.toRadians(currentAngle + angles[i] / 2)) * LENGTH);
       }
       canvas.drawArc(bounds, currentAngle, angles[i], true, paint); // 畫出扇形
-      canvas.restore();
+      canvas.restore(); // 復原到 save 之前的位置
       currentAngle += angles[i];
     }
   }
