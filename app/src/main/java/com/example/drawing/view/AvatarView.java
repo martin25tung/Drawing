@@ -32,6 +32,7 @@ public class AvatarView extends View {
 
   {
     bitmap = getAvatar((int) WIDTH);
+    setLayerType(LAYER_TYPE_HARDWARE, null);  // 可以用來下面的 saveLayer
   }
 
   @Override
