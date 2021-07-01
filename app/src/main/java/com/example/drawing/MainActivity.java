@@ -1,8 +1,10 @@
 package com.example.drawing;
 
+import android.animation.ObjectAnimator;
+import android.animation.TypeEvaluator;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -63,11 +65,36 @@ public class MainActivity extends AppCompatActivity {
     animator.setDuration(2000);
     animator.start();*/
 
-    view.animate()
+    /*view.animate()
         .translationX(Utils.dp2px(450))
         .setStartDelay(1000)
         .setDuration(2000)
         .setInterpolator(new AccelerateInterpolator())
-        .start();
+        .start();*/
+
+    Point targetPoint = new Point((int)Utils.dp2px(300), (int)Utils.dp2px(200));
+    ObjectAnimator animator = ObjectAnimator.ofObject(view, "point", new PointEvaluator(), targetPoint);
+    animator.setStartDelay(1000);
+    animator.setDuration(2000);
+    animator.start();
+  }
+
+  // 系統已經寫好了
+  class FloatValueEvaluator implements TypeEvaluator<Float> {
+
+    @Override public Float evaluate(float fraction, Float startValue, Float endValue) {
+      // start: 0   end: 2    fraction: 0.2   return: 0 + (2 - 0) * 0.2
+      return null;
+    }
+  }
+
+  class PointEvaluator implements TypeEvaluator<Point> {
+
+    @Override public Point evaluate(float fraction, Point startValue, Point endValue) {
+      // (1, 1)   (5, 5)    fraction: 0.2   x: 1 + (5 -1) * 0.2 y: 1 + (5 -1) * 0.2
+      float x = startValue.x + (endValue.x - startValue.x) * fraction;
+      float y = startValue.y + (endValue.y - startValue.y) * fraction;
+      return new Point( (int)x, (int)y);
+    }
   }
 }
