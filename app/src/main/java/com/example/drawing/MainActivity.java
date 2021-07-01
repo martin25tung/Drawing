@@ -1,10 +1,8 @@
 package com.example.drawing;
 
-import android.animation.Keyframe;
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -53,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     objectAnimator.start();*/
 
     // 客製化中間的流程  時間曲線
-    float length = Utils.dp2px(300);
+    /*float length = Utils.dp2px(300);
     Keyframe keyframe1 = Keyframe.ofFloat(0, 0);
     Keyframe keyframe2 = Keyframe.ofFloat(0.2f, 1.5f * length);
     Keyframe keyframe3 = Keyframe.ofFloat(0.8f, 0.6f * length);
@@ -63,6 +61,13 @@ public class MainActivity extends AppCompatActivity {
     ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(view, viewHolder);
     animator.setStartDelay(1000);
     animator.setDuration(2000);
-    animator.start();
+    animator.start();*/
+
+    view.animate()
+        .translationX(Utils.dp2px(450))
+        .setStartDelay(1000)
+        .setDuration(2000)
+        .setInterpolator(new AccelerateInterpolator())
+        .start();
   }
 }
