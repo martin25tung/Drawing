@@ -22,4 +22,8 @@ public class Utils {
         // 這邊才是實際取出圖片。先取圖片的實際寬高，再取圖片。這樣性能比較好。
         return BitmapFactory.decodeResource(resources, R.drawable.avatar_rengwuxian, options);
     }
+
+    public static float getZForCamera(){
+        return -6 * Resources.getSystem().getDisplayMetrics().density;
+    }
 }
