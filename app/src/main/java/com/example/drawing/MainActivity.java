@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.drawing.animation.ProvinceUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,11 +73,28 @@ public class MainActivity extends AppCompatActivity {
         .setInterpolator(new AccelerateInterpolator())
         .start();*/
 
-    Point targetPoint = new Point((int)Utils.dp2px(300), (int)Utils.dp2px(200));
+    /*Point targetPoint = new Point((int)Utils.dp2px(300), (int)Utils.dp2px(200));
     ObjectAnimator animator = ObjectAnimator.ofObject(view, "point", new PointEvaluator(), targetPoint);
     animator.setStartDelay(1000);
     animator.setDuration(2000);
+    animator.start();*/
+
+    ObjectAnimator animator = ObjectAnimator.ofObject(view, "province", new ProvinceEvaluator(), "澳门特别行政区");
+    animator.setStartDelay(1000);
+    animator.setDuration(5000);
     animator.start();
+  }
+
+
+  class ProvinceEvaluator implements TypeEvaluator<String> {
+
+    @Override public String evaluate(float fraction, String startValue, String endValue) {
+      // 北京市    上海市   fraction: 0.5f
+      int startIndex = ProvinceUtil.provinces.indexOf(startValue);
+      int endIndex = ProvinceUtil.provinces.indexOf(endValue);
+      int index = (int) (startIndex + (endIndex - startIndex) * fraction);
+      return ProvinceUtil.provinces.get(index);
+    }
   }
 
   // 系統已經寫好了
