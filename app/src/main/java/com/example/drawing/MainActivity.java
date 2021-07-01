@@ -1,7 +1,7 @@
 package com.example.drawing;
 
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.drawing.view.CameraView;
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     //animator.setStartDelay(1000);
     //animator.start();
 
-    ObjectAnimator bottomFlipAnimator = ObjectAnimator.ofFloat(view, "bottomFlip", 45);
+    /*ObjectAnimator bottomFlipAnimator = ObjectAnimator.ofFloat(view, "bottomFlip", 45);
     bottomFlipAnimator.setDuration(1500);
 
     ObjectAnimator flipRotationAnimator = ObjectAnimator.ofFloat(view, "flipRotation", 270);
@@ -41,6 +41,15 @@ public class MainActivity extends AppCompatActivity {
     AnimatorSet animatorSet = new AnimatorSet();
     animatorSet.playSequentially(bottomFlipAnimator, flipRotationAnimator, topFlipAnimator);
     animatorSet.setStartDelay(1000);
-    animatorSet.start();
+    animatorSet.start();*/
+
+    PropertyValuesHolder bottomFlipHolder = PropertyValuesHolder.ofFloat("bottomFlip", 45);
+    PropertyValuesHolder flipRotationHolder = PropertyValuesHolder.ofFloat("flipRotation", 270);
+    PropertyValuesHolder topFlipHolder = PropertyValuesHolder.ofFloat("topFlip", -45);
+    ObjectAnimator objectAnimator = ObjectAnimator.ofPropertyValuesHolder(view, bottomFlipHolder, flipRotationHolder, topFlipHolder);
+    objectAnimator.setStartDelay(1000);
+    objectAnimator.setDuration(2000);
+    objectAnimator.start();
+
   }
 }
