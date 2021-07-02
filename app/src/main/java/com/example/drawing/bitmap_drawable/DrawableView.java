@@ -2,8 +2,6 @@ package com.example.drawing.bitmap_drawable;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -19,7 +17,7 @@ public class DrawableView extends View {
   }
 
   {
-    drawable = new ColorDrawable(Color.RED);
+    drawable = new MeshDrawable();
   }
 
   @Override protected void onDraw(Canvas canvas) {
