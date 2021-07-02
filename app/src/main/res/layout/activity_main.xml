@@ -12,9 +12,9 @@
 <!--      android:layout_height="100dp"-->
 <!--      android:src="@drawable/avatar_rengwuxian"/>-->
 
-  <com.example.drawing.animation.ProvinceView
+  <com.example.drawing.bitmap_drawable.DrawableView
       android:id="@+id/view"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent" />
+      android:layout_width="150dp"
+      android:layout_height="200dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
