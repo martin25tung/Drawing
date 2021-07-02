@@ -1,23 +1,23 @@
 package com.example.drawing;
 
-import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.drawing.animation.ProvinceUtil;
+import com.example.drawing.bitmap_drawable.MaterialEditText;
 
 public class MainActivity extends AppCompatActivity {
 
-  View view;
+  MaterialEditText view;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    view = findViewById(R.id.view);
+    view = findViewById(R.id.editText);
+
 
     //view.animate()
     //    .translationX(Utils.dp2px(200))
@@ -79,10 +79,10 @@ public class MainActivity extends AppCompatActivity {
     animator.setDuration(2000);
     animator.start();*/
 
-    ObjectAnimator animator = ObjectAnimator.ofObject(view, "province", new ProvinceEvaluator(), "澳门特别行政区");
+    /*ObjectAnimator animator = ObjectAnimator.ofObject(view, "province", new ProvinceEvaluator(), "澳门特别行政区");
     animator.setStartDelay(1000);
     animator.setDuration(5000);
-    animator.start();
+    animator.start();*/
   }
 
 

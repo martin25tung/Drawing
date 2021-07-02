@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity"
+    android:orientation="vertical"
     >
 
 <!--  <ImageView-->
@@ -12,9 +14,28 @@
 <!--      android:layout_height="100dp"-->
 <!--      android:src="@drawable/avatar_rengwuxian"/>-->
 
-  <com.example.drawing.bitmap_drawable.DrawableView
-      android:id="@+id/view"
-      android:layout_width="150dp"
-      android:layout_height="200dp" />
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="#30000000">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+  </FrameLayout>
+
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="#30ff0000">
+    <com.example.drawing.bitmap_drawable.MaterialEditText
+        android:id="@+id/editText"
+        android:hint="Username"
+        app:useFloatingLabel="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+  </FrameLayout>
+
+
+
+</LinearLayout>
