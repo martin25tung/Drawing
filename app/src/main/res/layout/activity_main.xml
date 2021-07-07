@@ -3,39 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity"
     android:orientation="vertical"
     >
 
-<!--  <ImageView-->
-<!--      android:id="@+id/view"-->
-<!--      android:layout_width="100dp"-->
-<!--      android:layout_height="100dp"-->
-<!--      android:src="@drawable/avatar_rengwuxian"/>-->
-
-  <FrameLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="#30000000">
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-  </FrameLayout>
-
-  <FrameLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="#30ff0000">
-    <com.example.drawing.bitmap_drawable.MaterialEditText
-        android:id="@+id/editText"
-        android:hint="Username"
-        app:useFloatingLabel="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-  </FrameLayout>
-
+  <com.example.drawing.layout.SquareImageView
+      android:id="@+id/view"
+      android:layout_width="200dp"
+      android:layout_height="300dp"/>
 
 
 </LinearLayout>
