@@ -7,7 +7,7 @@
     android:orientation="vertical"
     >
 
-  <com.example.drawing.layout.SquareImageView
+  <com.example.drawing.layout.CircleView
       android:id="@+id/view"
       android:layout_width="200dp"
       android:layout_height="300dp"/>
