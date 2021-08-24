@@ -3,21 +3,24 @@ package com.example.drawing;
 import android.animation.TypeEvaluator;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.drawing.animation.ProvinceUtil;
-import com.example.drawing.bitmap_drawable.MaterialEditText;
 
 public class MainActivity extends AppCompatActivity {
 
-  MaterialEditText view;
+  View view;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    //view = findViewById(R.id.editText);
+    view = findViewById(R.id.view);
 
+    view.setOnClickListener(v -> {
+
+    });
 
     //view.animate()
     //    .translationX(Utils.dp2px(200))
