@@ -16,11 +16,11 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    view = findViewById(R.id.view);
-
-    view.setOnClickListener(v -> {
-
-    });
+    //view = findViewById(R.id.view);
+    //
+    //view.setOnClickListener(v -> {
+    //
+    //});
 
     //view.animate()
     //    .translationX(Utils.dp2px(200))

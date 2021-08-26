@@ -16,12 +16,12 @@ class TouchLayout extends ViewGroup {
   }
 
   @Override public boolean onInterceptTouchEvent(MotionEvent ev) {
-    int delta = (int) ev.getY(); // 縱向移動距離
-    if (Math.abs(delta) > SLOP) {
+    //int delta = (int) ev.getY(); // 縱向移動距離
+    //if (Math.abs(delta) > SLOP) {
       return false;
-    } else {
-      return true;
-    }
+    //} else {
+    //  return true;
+    //}
   }
 
   @Override public boolean onTouchEvent(MotionEvent event) {
