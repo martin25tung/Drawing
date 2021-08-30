@@ -64,7 +64,7 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
   @Override protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
 
-    canvas.translate(offsetX, offsetY);
+    canvas.translate(offsetX * scaleFraction, offsetY * scaleFraction); // 加上偏移量 讓偏移跟縮放一起
     float scale = smallScale + (bigScale - smallScale) * scaleFraction; // ( 差值 ＊ 完成率 ) + 起始值
     canvas.scale(scale, scale, getWidth() / 2f, getHeight() / 2f);
     canvas.drawBitmap(bitmap, originalOffsetX, originalOffsetY, paint);
@@ -107,16 +107,20 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
   public boolean onScroll(MotionEvent down, MotionEvent event, float distanceX, float distanceY) {
     if (big) {
       offsetX -= distanceX;
+      offsetY -= distanceY;
       // 需要加上左右邊界修正
-      offsetX = Math.min(offsetX, (bitmap.getWidth() * bigScale - getWidth()) / 2);
-      offsetX = Math.max(offsetX, - (bitmap.getWidth() * bigScale - getWidth()) / 2);
-      offsetY -= distanceY ;
-      offsetY = Math.min(offsetY, (bitmap.getHeight() * bigScale - getHeight()) / 2);
-      offsetY = Math.max(offsetY, - (bitmap.getHeight() * bigScale - getHeight()) / 2);
+      fixOffsets();
       invalidate();
     }
 
     return false;
+  }
+
+  private void fixOffsets() {
+    offsetX = Math.min(offsetX, (bitmap.getWidth() * bigScale - getWidth()) / 2);
+    offsetX = Math.max(offsetX, - (bitmap.getWidth() * bigScale - getWidth()) / 2);
+    offsetY = Math.min(offsetY, (bitmap.getHeight() * bigScale - getHeight()) / 2);
+    offsetY = Math.max(offsetY, - (bitmap.getHeight() * bigScale - getHeight()) / 2);
   }
 
   @Override public void onLongPress(MotionEvent e) {
@@ -143,6 +147,10 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
   @Override public boolean onDoubleTap(MotionEvent e) {
     big = !big;
     if (big) {
+      // 讓在點擊的時候，能夠停留在原點放大
+      offsetX = (e.getX() - getWidth() / 2f) - (e.getX() - getWidth() / 2) * bigScale / smallScale;
+      offsetY = (e.getY() - getHeight() / 2f) - (e.getY() - getHeight() / 2) * bigScale / smallScale;
+      fixOffsets();
       getScaleAnimator().start();
     } else {
       getScaleAnimator().reverse();
