@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.core.view.GestureDetectorCompat;
 import com.example.drawing.Utils;
 
-public class ScalableImageView extends View implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
+public class ScalableImageView extends View {
 
   private static final float IMAGE_WIDTH = Utils.dp2px(300);
   private static final float OVER_SCALE_FACTOR = 1.5f;
@@ -34,13 +34,14 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
   GestureDetectorCompat detector;
   OverScroller scroller;
   HenFlingRunner henFlingRunner = new HenFlingRunner();
+  HenGestureListener gestureListener = new HenGestureListener();
 
   public ScalableImageView(Context context,
       @Nullable AttributeSet attrs) {
     super(context, attrs);
 
     bitmap = Utils.getAvatar(getResources(), (int) IMAGE_WIDTH);
-    detector = new GestureDetectorCompat(context, this);
+    detector = new GestureDetectorCompat(context, gestureListener);
     scroller = new OverScroller(context);
   }
 
@@ -91,30 +92,73 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     return detector.onTouchEvent(event);
   }
 
-  @Override public boolean onDown(MotionEvent e) {
-    return true; // 這必須返回 true
-  }
-
-  @Override public void onShowPress(MotionEvent e) {
-
-  }
-
-  @Override public boolean onSingleTapUp(MotionEvent e) {
-    return false; // 單擊
-  }
-
-  @Override
-  public boolean onScroll(MotionEvent down, MotionEvent event, float distanceX, float distanceY) {
-    if (big) {
-      offsetX -= distanceX;
-      offsetY -= distanceY;
-      // 需要加上左右邊界修正
-      fixOffsets();
-      invalidate();
+  class HenGestureListener extends GestureDetector.SimpleOnGestureListener {
+    @Override public boolean onDown(MotionEvent e) {
+      return true; // 這必須返回 true
     }
 
-    return false;
+    @Override public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override public boolean onSingleTapUp(MotionEvent e) {
+      return false; // 單擊
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent down, MotionEvent event, float distanceX, float distanceY) {
+      if (big) {
+        offsetX -= distanceX;
+        offsetY -= distanceY;
+        // 需要加上左右邊界修正
+        fixOffsets();
+        invalidate();
+      }
+
+      return false;
+    }
+
+    @Override public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+      if (big) {
+        scroller.fling((int) offsetX, (int) offsetY, (int) velocityX, (int) velocityY,
+            - (int) (bitmap.getWidth() * bigScale - getWidth()) / 2,
+            (int) (bitmap.getWidth() * bigScale - getWidth()) / 2,
+            - (int) (bitmap.getHeight() * bigScale - getHeight()) / 2,
+            (int) (bitmap.getHeight() * bigScale - getHeight()) / 2);
+        postOnAnimation(henFlingRunner);
+      }
+      return false;
+    }
+
+    @Override public boolean onSingleTapConfirmed(MotionEvent e) {
+      return false;
+    }
+
+    @Override public boolean onDoubleTap(MotionEvent e) {
+      big = !big;
+      if (big) {
+        // 讓在點擊的時候，能夠停留在原點放大
+        offsetX = (e.getX() - getWidth() / 2f) - (e.getX() - getWidth() / 2) * bigScale / smallScale;
+        offsetY = (e.getY() - getHeight() / 2f) - (e.getY() - getHeight() / 2) * bigScale / smallScale;
+        fixOffsets();
+        getScaleAnimator().start();
+      } else {
+        getScaleAnimator().reverse();
+      }
+      return false;
+    }
+
+    @Override public boolean onDoubleTapEvent(MotionEvent e) {
+      return false;
+    }
   }
+
+
 
   private void fixOffsets() {
     offsetX = Math.min(offsetX, (bitmap.getWidth() * bigScale - getWidth()) / 2);
@@ -123,44 +167,7 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     offsetY = Math.max(offsetY, - (bitmap.getHeight() * bigScale - getHeight()) / 2);
   }
 
-  @Override public void onLongPress(MotionEvent e) {
 
-  }
-
-  @Override
-  public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-    if (big) {
-      scroller.fling((int) offsetX, (int) offsetY, (int) velocityX, (int) velocityY,
-          - (int) (bitmap.getWidth() * bigScale - getWidth()) / 2,
-          (int) (bitmap.getWidth() * bigScale - getWidth()) / 2,
-          - (int) (bitmap.getHeight() * bigScale - getHeight()) / 2,
-          (int) (bitmap.getHeight() * bigScale - getHeight()) / 2);
-      postOnAnimation(henFlingRunner);
-    }
-    return false;
-  }
-
-  @Override public boolean onSingleTapConfirmed(MotionEvent e) {
-    return false;
-  }
-
-  @Override public boolean onDoubleTap(MotionEvent e) {
-    big = !big;
-    if (big) {
-      // 讓在點擊的時候，能夠停留在原點放大
-      offsetX = (e.getX() - getWidth() / 2f) - (e.getX() - getWidth() / 2) * bigScale / smallScale;
-      offsetY = (e.getY() - getHeight() / 2f) - (e.getY() - getHeight() / 2) * bigScale / smallScale;
-      fixOffsets();
-      getScaleAnimator().start();
-    } else {
-      getScaleAnimator().reverse();
-    }
-    return false;
-  }
-
-  @Override public boolean onDoubleTapEvent(MotionEvent e) {
-    return false;
-  }
 
   class HenFlingRunner implements Runnable {
 
