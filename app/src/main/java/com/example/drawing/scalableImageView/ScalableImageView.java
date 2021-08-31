@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.OverScroller;
 import androidx.annotation.Nullable;
@@ -29,12 +30,14 @@ public class ScalableImageView extends View {
   float smallScale;
   float bigScale;
   boolean big;
-  float scaleFraction; // 0 ~ 1f
+  float currentScale; // 0 ~ 1f
   ObjectAnimator scaleAnimator;
   GestureDetectorCompat detector;
   OverScroller scroller;
   HenFlingRunner henFlingRunner = new HenFlingRunner();
   HenGestureListener gestureListener = new HenGestureListener();
+  ScaleGestureDetector scaleDetector;
+  HenScaleListener henScaleListener = new HenScaleListener();
 
   public ScalableImageView(Context context,
       @Nullable AttributeSet attrs) {
@@ -43,6 +46,7 @@ public class ScalableImageView extends View {
     bitmap = Utils.getAvatar(getResources(), (int) IMAGE_WIDTH);
     detector = new GestureDetectorCompat(context, gestureListener);
     scroller = new OverScroller(context);
+    scaleDetector = new ScaleGestureDetector(context, henScaleListener);
   }
 
   @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -64,32 +68,40 @@ public class ScalableImageView extends View {
 
   @Override protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
-
+    // a -> b  中間值：c 算出百分比
+    // (c - a) / ( b - a )
+    float scaleFraction = (currentScale - smallScale) / (bigScale - smallScale);
     canvas.translate(offsetX * scaleFraction, offsetY * scaleFraction); // 加上偏移量 讓偏移跟縮放一起
-    float scale = smallScale + (bigScale - smallScale) * scaleFraction; // ( 差值 ＊ 完成率 ) + 起始值
-    canvas.scale(scale, scale, getWidth() / 2f, getHeight() / 2f);
+    //float scale = smallScale + (bigScale - smallScale) * scaleFraction; // ( 差值 ＊ 完成率 ) + 起始值
+    canvas.scale(currentScale, currentScale, getWidth() / 2f, getHeight() / 2f);
     canvas.drawBitmap(bitmap, originalOffsetX, originalOffsetY, paint);
   }
 
-  private float getScaleFraction() {
-    return scaleFraction;
+  private float getCurrentScale() {
+    return currentScale;
   }
 
-  private void setScaleFraction(float scaleFraction) {
-    this.scaleFraction = scaleFraction;
+  private void setCurrentScale(float currentScale) {
+    this.currentScale = currentScale;
     invalidate();
   }
 
   private ObjectAnimator getScaleAnimator() {
     if (scaleAnimator == null) {
-      scaleAnimator = ObjectAnimator.ofFloat(this, "scaleFraction", 0, 1);
+      scaleAnimator = ObjectAnimator.ofFloat(this, "currentScale", 0);
     }
     scaleAnimator.setFloatValues(smallScale, bigScale);
     return scaleAnimator;
   }
 
   @Override public boolean onTouchEvent(MotionEvent event) {
-    return detector.onTouchEvent(event);
+    // 雙指放大與雙指移動會有衝突
+    boolean result = scaleDetector.onTouchEvent(event);
+    // 以雙指放大的detector優先
+    if (scaleDetector.isInProgress()) {
+      result = detector.onTouchEvent(event);
+    }
+    return result;
   }
 
   class HenGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -179,6 +191,32 @@ public class ScalableImageView extends View {
         invalidate();
         postOnAnimation(this);
       }
+    }
+  }
+
+
+  class HenScaleListener implements ScaleGestureDetector.OnScaleGestureListener {
+    float initialScale;
+
+    @Override
+    public boolean onScale(ScaleGestureDetector detector) {
+      // 可以拿到倍數跟交點(多個手指之間的中心點)
+      // detector.getScaleFactor() // 操作倍數
+      // detector.getFocusX() // 交點
+      currentScale = initialScale * detector.getScaleFactor();
+      invalidate();
+      return false;
+    }
+
+    @Override
+    public boolean onScaleBegin(ScaleGestureDetector detector) {
+      initialScale = currentScale;
+      return true;
+    }
+
+    @Override
+    public void onScaleEnd(ScaleGestureDetector detector) {
+
     }
   }
 
