@@ -9,6 +9,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.41822916666666665" />
+        <entry key="app/src/main/res/layout/drag_helper_grid_view.xml" value="0.34193840579710144" />
+        <entry key="app/src/main/res/layout/drag_listener_grid_view.xml" value="0.34193840579710144" />
+        <entry key="app/src/main/res/layout/drag_to_collect.xml" value="0.34193840579710144" />
+        <entry key="app/src/main/res/layout/drag_up_down.xml" value="0.34193840579710144" />
+        <entry key="app/src/main/res/layout/nested_scalable_image_view.xml" value="0.34193840579710144" />
+        <entry key="app/src/main/res/layout/nested_scroll_view.xml" value="0.34193840579710144" />
         <entry key="app/src/main/res/layout/two_pager.xml" value="0.3451086956521739" />
       </map>
     </option>

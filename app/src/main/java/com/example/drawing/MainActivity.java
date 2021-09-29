@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.two_pager);
+    setContentView(R.layout.drag_helper_grid_view);
 
     //view = findViewById(R.id.view);
     //
